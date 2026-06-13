@@ -91,7 +91,7 @@ Follow-up Email
 
 Watch the full workflow demo here:
 
-[Click here to watch the Loom Demo]([https://www.loom.com/share/your-video-link](https://www.loom.com/share/5ca367924d8f458e800e650fa3857ffd))
+[Click here to watch the Loom Demo](https://www.loom.com/share/5ca367924d8f458e800e650fa3857ffd)
 
 ---
 
