@@ -1,10 +1,6 @@
 # 🚀 Lead Enrichment & Automation
 
 <p align="center">
-  <img src="docs/Lead_Eneichment.png" alt="Lead Enrichment and Automation Workflow" width="100%">
-</p>
-
-<p align="center">
   <b>An end-to-end n8n automation workflow for lead validation, enrichment, scoring, PDF generation, CRM handling, and sales follow-up.</b>
 </p>
 
