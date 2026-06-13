@@ -87,6 +87,14 @@ Follow-up Email
 
 ---
 
+## 🎥 Project Demo
+
+Watch the full workflow demo here:
+
+[Click here to watch the Loom Demo]([https://www.loom.com/share/your-video-link](https://www.loom.com/share/5ca367924d8f458e800e650fa3857ffd))
+
+---
+
 ## 🧠 Workflow Architecture
 
 The workflow is divided into different business departments to simulate a real company process.
