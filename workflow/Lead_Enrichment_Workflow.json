@@ -1,0 +1,1915 @@
+{
+  "name": "Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Nexara AI - Automation Services",
+        "formDescription": "Let’s automate your business smarter.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name:"
+            },
+            {
+              "fieldLabel": "Email:"
+            },
+            {
+              "fieldLabel": "Contact:"
+            },
+            {
+              "fieldLabel": "Company:"
+            },
+            {
+              "fieldLabel": "Role:"
+            },
+            {
+              "fieldLabel": "Source:",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Website"
+                  },
+                  {
+                    "option": "Linkedin"
+                  },
+                  {
+                    "option": "Facebook"
+                  },
+                  {
+                    "option": "X / Twitter"
+                  },
+                  {
+                    "option": "Youtube"
+                  },
+                  {
+                    "option": "Other"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Service:",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "AI ChatBot"
+                  },
+                  {
+                    "option": "Customer Services Support"
+                  },
+                  {
+                    "option": "Leads Automation"
+                  },
+                  {
+                    "option": "B2B"
+                  },
+                  {
+                    "option": "AI Asisstant"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "We will get you soon!"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -320,
+        -400
+      ],
+      "id": "df53b7ff-cc25-4967-aeef-d56d737e57dc",
+      "name": "On lead entry",
+      "webhookId": "2c55e649-68ed-4685-9349-a4bf2ddb7077"
+    },
+    {
+      "parameters": {
+        "content": "## User-End\n\nForm submission triggers the workflow\n",
+        "height": 688,
+        "width": 182,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -816
+      ],
+      "id": "6b48ea07-4523-45f5-b38e-3e40b521e1ce",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "71ffdbce-6234-4102-b169-219818feba53",
+              "leftValue": "={{ $json['Email:'].isEmail() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8ba39cd8-8062-412d-904d-33946d0608e7",
+              "leftValue": "={{[\"tempmail.com\",\"rumail.com\",\"example.com\",\"dummy.com\"]}}",
+              "rightValue": "={{ $json['Email:'].extractDomain() }}",
+              "operator": {
+                "type": "array",
+                "operation": "notContains",
+                "rightType": "any"
+              }
+            },
+            {
+              "id": "0e5f1fcc-6258-469b-92ed-ad9ebc4989e7",
+              "leftValue": "={{ $json['Email:'].length }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -96,
+        -400
+      ],
+      "id": "09d8602f-449a-45b8-a1ea-f98992a45f69",
+      "name": "Basic Email Validation"
+    },
+    {
+      "parameters": {
+        "operation": "emailVerifier",
+        "email": "={{ $json['Email:'] }}"
+      },
+      "type": "n8n-nodes-base.hunter",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -496
+      ],
+      "id": "46f5fd74-55a6-418f-b4a6-40b785e51397",
+      "name": "Hunter",
+      "notesInFlow": true,
+      "credentials": {
+        "hunterApi": {
+          "id": "EUPW2raGvMuoKYHW",
+          "name": "Hunter account"
+        }
+      },
+      "notes": "To check email"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "09672b4e-2b83-4a08-8618-e1fc62f85633",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "valid",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "72431495-4018-4fef-bf1c-bd84177715e2",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 20,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        352,
+        -496
+      ],
+      "id": "f1ee7c5d-d679-46d3-bbe8-8f64b49903a7",
+      "name": "Hunter Email Validation"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg",
+          "mode": "list",
+          "cachedResultName": "Lead Management",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1802392500,
+          "mode": "list",
+          "cachedResultName": "lead_to_be_nurtured",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit#gid=1802392500"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json['Name:'] }}",
+            "Email": "={{ $json['Email:'] }}",
+            "Company Name": "={{ $json['Company:'] }}",
+            "Source": "={{ $json['Source:'] }}",
+            "Job Title": "={{ $json['Role:'] }}",
+            "Interest Area": "={{ $json['Service:'] }}",
+            "Reason": "Basic Validation Failed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest Area",
+              "displayName": "Interest Area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        128,
+        -304
+      ],
+      "id": "81c28640-9757-465e-8dc1-1d0be63544d7",
+      "name": "Appending ",
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JGaodSkNkA9dYGBQ",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Nurture Lead\n"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg",
+          "mode": "list",
+          "cachedResultName": "Lead Management",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1802392500,
+          "mode": "list",
+          "cachedResultName": "lead_to_be_nurtured",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit#gid=1802392500"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json['Name:'] }}",
+            "Email": "={{ $json['Email:'] }}",
+            "Company Name": "={{ $json['Company:'] }}",
+            "Source": "={{ $json['Source:'] }}",
+            "Job Title": "={{ $json['Role:'] }}",
+            "Interest Area": "={{ $json['Service:'] }}",
+            "Reason": "Third party email validation failed"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest Area",
+              "displayName": "Interest Area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        576,
+        -688
+      ],
+      "id": "26ef9e58-e8f9-41d8-bbe8-b01b619fe19f",
+      "name": "Adding ",
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JGaodSkNkA9dYGBQ",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Nurture Lead"
+    },
+    {
+      "parameters": {
+        "content": "## Sales OP/ Intern\n\n* Monitors incoming submissions\n* Check email validity",
+        "height": 688,
+        "width": 640,
+        "color": "#3D2424"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        -816
+      ],
+      "id": "57058a73-28e0-4d9f-8dc3-aec6dcfa8276",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.hunter.io/v2/combined/find",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.email }}"
+            },
+            {
+              "name": "api_key",
+              "value": "c779ab98305856a6339961872fa5a2d24430faa1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        576,
+        -368
+      ],
+      "id": "fdd70af3-91c9-4680-9357-54495955c18f",
+      "name": "Enrich lead",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 4,
+      "waitBetweenTries": 3000,
+      "onError": "continueRegularOutput",
+      "notes": "Extracting company data"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "data.person.email",
+              "field2": "email"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1024,
+        -544
+      ],
+      "id": "23e5f8fe-6c81-407a-a146-b9f22d844374",
+      "name": "Merge",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "## Bussiness Analyst\n\n* Enrich Lead\n* Get's Company Validity\n* Purify Data",
+        "height": 688,
+        "width": 688,
+        "color": "#1C2831"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        528,
+        -816
+      ],
+      "id": "2f963e13-1d57-4de6-83b9-9baf336af947",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app9pytOoYM01eUxz",
+          "mode": "list",
+          "cachedResultName": "Client Project Tracker",
+          "cachedResultUrl": "https://airtable.com/app9pytOoYM01eUxz"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG9pi3ud8pr1wyJ",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://airtable.com/app9pytOoYM01eUxz/tblG9pi3ud8pr1wyJ"
+        },
+        "filterByFormula": "={email} = '{{ $json.data.person.email }}'",
+        "options": {},
+        "sort": {
+          "property": []
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1248,
+        -544
+      ],
+      "id": "504cb7dd-3275-4f78-9aea-1d7db500cf50",
+      "name": "Search CRM",
+      "notesInFlow": true,
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "TA2sjPKvKVld6cmp",
+          "name": "Airtable OAuth2 API"
+        }
+      },
+      "notes": "Lead new or old?"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "fields.Email",
+              "field2": "data.person.email"
+            }
+          ]
+        },
+        "joinMode": "enrichInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1472,
+        -544
+      ],
+      "id": "eda85435-0c00-4cde-afb0-87831c68508b",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3104,
+        -304
+      ],
+      "id": "4c83438b-ac35-4d12-92a9-732c1b8ff636",
+      "name": "Wait",
+      "webhookId": "3b243eda-7a44-47bf-a869-8d9fc181ed63"
+    },
+    {
+      "parameters": {
+        "content": "## Sales OP/ Intern\n\n* Check if lead is already client or not\n* Categorizes the lead based on its purity\n* Contact with the respective department based on lead condition",
+        "height": 816,
+        "width": 1088,
+        "color": "#303225"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -816
+      ],
+      "id": "478bcdba-5da6-49f5-9072-7e7f40a52782",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Content Coordinater\n\n* If lead is high or medium value creates its PDF.\n* Place the lead's pdf with his/her biography in Goggle drive.",
+        "height": 352,
+        "width": 1200,
+        "color": "#4E374D"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        -976
+      ],
+      "id": "80643220-a50f-446b-8fa5-d95ae0dceee8",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Sales Manager\n\n* Contacting with the lead.\n* Send message to executive\n* Following up the lead",
+        "height": 352,
+        "width": 1040,
+        "color": "#314B2F"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2448,
+        -496
+      ],
+      "id": "63688e11-9834-45d8-b6f4-de7b1a6074a0",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "# Lead Enrichment and Automation",
+        "height": 80,
+        "width": 592,
+        "color": "#171616"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1328,
+        -1264
+      ],
+      "id": "f31f14fb-3df2-4785-9ac1-8f6a7e1a7718",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "065c462b-4db8-4363-92f2-5cf168d1e710",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        800,
+        -368
+      ],
+      "id": "a2456f88-8bfa-4618-9d58-3be15190685b",
+      "name": "Company Validation"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg",
+          "mode": "list",
+          "cachedResultName": "Lead Management",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1802392500,
+          "mode": "list",
+          "cachedResultName": "lead_to_be_nurtured",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit#gid=1802392500"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('On lead entry').item.json[\"Email:\"] }}",
+            "Name": "={{ $('On lead entry').item.json[\"Name:\"] }}",
+            "Company Name": "={{ $('On lead entry').item.json[\"Company:\"] }}",
+            "Job Title": "={{ $('On lead entry').item.json[\"Role:\"] }}",
+            "Source": "={{ $('On lead entry').item.json[\"Source:\"] }}",
+            "Interest Area": "={{ $('On lead entry').item.json[\"Service:\"] }}",
+            "Reason": "Lead Company is not verified. Not get any detail of it. Need further processing."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest Area",
+              "displayName": "Interest Area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1056,
+        -352
+      ],
+      "id": "b2261578-976c-4e34-ba5c-7630383fdbf5",
+      "name": "Nurturing Lead",
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JGaodSkNkA9dYGBQ",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "No company found"
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "allowed_countries = [\n    \"United States\", \"Pakistan\", \"United Kingdom\",\n    \"Australia\", \"Austrailia\", \"Netherland\",\n    \"Netherlands\", \"India\", \"England\"\n]\n\nallowed_sectors = [\n    \"Information Technology\",\n    \"Software\",\n    \"Automation\",\n    \"Artificial Intelligence\"\n]\n\n\ndef get_nested(obj, path, default=None):\n    current = obj\n    for key in path:\n        if isinstance(current, dict):\n            current = current.get(key)\n        else:\n            return default\n\n        if current is None:\n            return default\n\n    return current\n\n\ndef find_key(obj, target_key):\n    if isinstance(obj, dict):\n        for key, value in obj.items():\n            if key == target_key:\n                return value\n\n            found = find_key(value, target_key)\n            if found is not None:\n                return found\n\n    elif isinstance(obj, list):\n        for item in obj:\n            found = find_key(item, target_key)\n            if found is not None:\n                return found\n\n    return None\n\n\nfor item in _items:\n    data = item[\"json\"]\n\n    email_score = find_key(data, \"score\") or 0\n\n    try:\n        email_score = int(email_score)\n    except:\n        email_score = 0\n\n    country = get_nested(data, [\"data\", \"person\", \"geo\", \"country\"], \"\")\n\n    sector = (\n        get_nested(data, [\"data\", \"company\", \"category\", \"sector\"])\n        or get_nested(data, [\"data\", \"person\", \"category\", \"sector\"])\n        or get_nested(data, [\"data\", \"category\", \"sector\"])\n        or \"\"\n    )\n\n    condition_1 = email_score > 60\n    condition_2 = country in allowed_countries\n    condition_3 = sector in allowed_sectors\n\n    true_conditions = int(condition_1) + int(condition_2) + int(condition_3)\n\n    if true_conditions == 3:\n        data[\"lead_score\"] = 3\n        data[\"lead_value\"] = \"high\"\n    elif true_conditions >= 1:\n        data[\"lead_score\"] = 2\n        data[\"lead_value\"] = \"medium\"\n    else:\n        data[\"lead_score\"] = 0\n        data[\"lead_value\"] = \"low\"\n\nreturn _items"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1696,
+        -544
+      ],
+      "id": "f9a80b6b-94ea-4e1c-853b-7e672de3a815",
+      "name": "Assigning Lead Score"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.lead_score }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "3e212da7-caae-45ee-b214-f4e554a96c0f"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "High"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6d5d530e-9f70-4b44-9926-29e919d2f08f",
+                    "leftValue": "={{ $json.lead_value }}",
+                    "rightValue": "medium",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Medium"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e4704dc5-d7b7-46f9-95e1-79c1201a6773",
+                    "leftValue": "={{ $json.lead_score }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Low"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1920,
+        -560
+      ],
+      "id": "5286f6b1-f6a4-4aa7-abbe-be3e96c2ae6b",
+      "name": "Based on",
+      "notesInFlow": true,
+      "notes": "Categories"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "rehaan666nazir@gmail.com",
+        "subject": "New Lead Approval",
+        "message": "A new medium_valued lead wants our services.\n\nSould we make it our count or not?",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2144,
+        -368
+      ],
+      "id": "4cb4ebbe-d143-46ed-b16a-52c89a799d4b",
+      "name": "Approving Lead",
+      "webhookId": "2f33ed0e-eac0-4f34-b29e-4d91b54a7648",
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FF2t3A7vx53rjPQc",
+          "name": "Gmail OAuth2 API"
+        }
+      },
+      "notes": "From Sales Manager"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg",
+          "mode": "list",
+          "cachedResultName": "Lead Management",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1802392500,
+          "mode": "list",
+          "cachedResultName": "lead_to_be_nurtured",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit#gid=1802392500"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('On lead entry').item.json[\"Email:\"] }}",
+            "Name": "={{ $('On lead entry').item.json[\"Name:\"] }}",
+            "Company Name": "={{ $('On lead entry').item.json[\"Company:\"] }}",
+            "Job Title": "={{ $('On lead entry').item.json[\"Role:\"] }}",
+            "Source": "={{ $('On lead entry').item.json[\"Source:\"] }}",
+            "Interest Area": "={{ $('On lead entry').item.json[\"Service:\"] }}",
+            "Reason": "Low Lead Score. Need further validations."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest Area",
+              "displayName": "Interest Area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reason",
+              "displayName": "Reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2144,
+        -176
+      ],
+      "id": "33597fca-f78d-42a3-be9c-a32fd5cc0175",
+      "name": "Inappropriate Lead",
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JGaodSkNkA9dYGBQ",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "0 lead_score"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "14gMNeFxaugKqBQR94zvgfLsq-KA3MA5WZh3TVIUbts4",
+          "mode": "list",
+          "cachedResultName": "lead_name_company_name_country",
+          "cachedResultUrl": "https://docs.google.com/document/d/14gMNeFxaugKqBQR94zvgfLsq-KA3MA5WZh3TVIUbts4/edit?usp=drivesdk"
+        },
+        "name": "={{ $('On lead entry').item.json[\"Name:\"] }}_{{ $('On lead entry').item.json[\"Company:\"] }}_{{ $('Merge1').item.json.data.person.geo.countryCode }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2480,
+        -784
+      ],
+      "id": "91319b87-3ed3-42db-9c98-bc14bcfe02e7",
+      "name": "Copying ",
+      "notesInFlow": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fpLbPkKLw9Ce1f9N",
+          "name": "Google Drive OAuth2 API"
+        }
+      },
+      "notes": "Template"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": " [lead_name]",
+              "replaceText": "={{ $('On lead entry').item.json['Name:'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[service]",
+              "replaceText": "={{ $('On lead entry').item.json[\"Service:\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[company_name]",
+              "replaceText": "={{ $('On lead entry').item.json['Company:'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[lead_contact]",
+              "replaceText": "={{ $('On lead entry').item.json['Contact:'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[email]",
+              "replaceText": "={{ $('On lead entry').item.json['Email:'] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[date]",
+              "replaceText": "={{ $now.format('MMM d,yyyy') }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[country]",
+              "replaceText": "={{ $('Merge1').item.json.data.person.geo.country }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "[lead_name]",
+              "replaceText": "={{ $('On lead entry').item.json['Name:'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -784
+      ],
+      "id": "ed20a5d3-a28f-4b60-8a64-76b96a7e8d93",
+      "name": "Updating",
+      "notesInFlow": true,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "vRVROTed2VxfGnJr",
+          "name": "Google Docs OAuth2 API"
+        }
+      },
+      "notes": "Template"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.documentId }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2928,
+        -784
+      ],
+      "id": "af358d53-9d64-4f85-a3e3-c52b5e5f2a95",
+      "name": "Downloading",
+      "notesInFlow": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fpLbPkKLw9Ce1f9N",
+          "name": "Google Drive OAuth2 API"
+        }
+      },
+      "notes": "PDF"
+    },
+    {
+      "parameters": {
+        "name": "={{ $('On lead entry').item.json['Name:'] }}_{{ $('On lead entry').item.json['Company:'] }}_{{ $('On lead entry').item.json['Service:'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1zxLPTYPXt1DcYzqOapkx-Mi4T-gni5Z0",
+          "mode": "list",
+          "cachedResultName": "Lead Management System",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1zxLPTYPXt1DcYzqOapkx-Mi4T-gni5Z0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3136,
+        -784
+      ],
+      "id": "2cb38025-9b60-4133-a6f8-f5c81677dd35",
+      "name": "Uploading pdf",
+      "notesInFlow": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fpLbPkKLw9Ce1f9N",
+          "name": "Google Drive OAuth2 API"
+        }
+      },
+      "notes": "to drive"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg",
+          "mode": "list",
+          "cachedResultName": "Lead Management",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "valid_lead_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BbulT6eCoWAj29aUZ7rjlcMi1mA46GV1I7bMjUNHgfg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('On lead entry').item.json['Name:'] }}",
+            "Email": "={{ $('On lead entry').item.json['Email:'] }}",
+            "Company Name": "={{ $('On lead entry').item.json['Company:'] }}",
+            "Job Title": "={{ $('On lead entry').item.json['Role:'] }}",
+            "Source": "={{ $('On lead entry').item.json['Source:'] }}",
+            "Interest Area": "={{ $('On lead entry').item.json['Service:'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Interest Area",
+              "displayName": "Interest Area",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3536,
+        -784
+      ],
+      "id": "ecb20257-ef11-40d2-a6fb-3e250be19d3f",
+      "name": "Finalised Lead",
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JGaodSkNkA9dYGBQ",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Entry"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BA5M4QGVB",
+          "mode": "list",
+          "cachedResultName": "random-channel"
+        },
+        "text": "=Hye Content Cordinator!\n\nA {{ $json.lead_value }}_valued lead reach to us via {{ $('On lead entry').item.json['Source:'] }}.\n\n{{ $('On lead entry').item.json['Name:'] }} from {{ $('On lead entry').item.json['Company:'] }} wants service of {{ $('On lead entry').item.json['Service:'] }} from us. We need to contact him/her.\n\nContact : {{ $('On lead entry').item.json['Contact:'] }}\nEmail : {{ $('On lead entry').item.json['Email:'] }}\n\nRegards,\n    Sales Ops Team",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        2496,
+        -304
+      ],
+      "id": "7be16c82-486a-43ce-92ee-321511702207",
+      "name": "Contacting",
+      "webhookId": "2a0ece8f-ce8a-4c31-a367-5d46909392e3",
+      "notesInFlow": true,
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "XJ3MQA7TUDLGooEL",
+          "name": "Slack OAuth2 API"
+        }
+      },
+      "notes": "Account Sales Executive"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "rehaan666nazir@gmail.com",
+          "mode": "list",
+          "cachedResultName": "rehaan666nazir@gmail.com"
+        },
+        "start": "={{ $now.plus({ days: 1 }).set({ hour: 10, minute: 0, second: 0, millisecond: 0 }) }}",
+        "end": "={{ $now.plus({ days: 1 }).set({ hour: 11, minute: 0, second: 0, millisecond: 0 }) }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        2704,
+        -304
+      ],
+      "id": "8bc9a036-6e1a-4d90-8e80-eef30b13ccb3",
+      "name": "Scheduling Event",
+      "notesInFlow": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "zZFLCjlOaDXgik5J",
+          "name": "Google Calendar OAuth2 API"
+        }
+      },
+      "notes": "to lead"
+    },
+    {
+      "parameters": {
+        "sendTo": "rehaan666nazir@gmail.com",
+        "subject": "Welcome from Nexara!",
+        "message": "=<!DOCTYPE html> <html> <head> <meta charset=\"UTF-8\" /> <title>Welcome to Nexara</title> </head> <body style=\"margin:0; padding:0; background:#050816; font-family:Arial, Helvetica, sans-serif; color:#ffffff;\"> <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#050816; padding:30px 0;\"> <tr> <td align=\"center\"> <table width=\"620\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#0b1024; border-radius:18px; overflow:hidden; border:1px solid #1f2a5a; box-shadow:0 0 35px rgba(0,180,255,0.25);\">\n        <tr>\n          <td style=\"padding:34px 35px; background:linear-gradient(135deg,#07111f,#0a1f44,#111827); text-align:center;\">\n            <h1 style=\"margin:0; font-size:34px; letter-spacing:1px; color:#ffffff;\">\n              Welcome to <span style=\"color:#38bdf8;\">Nexara</span>\n            </h1>\n            <p style=\"margin:12px 0 0; color:#cbd5e1; font-size:16px;\">\n              AI Automation Built for Smarter Business Growth\n            </p>\n          </td>\n        </tr>\n\n        <tr>\n          <td style=\"padding:35px;\">\n            <h2 style=\"margin:0 0 16px; color:#ffffff; font-size:24px;\">\n              Your automation journey starts here.\n            </h2>\n\n            <p style=\"margin:0 0 18px; color:#d1d5db; font-size:15.5px; line-height:1.7;\">\n              Thank you {{ $('On lead entry').item.json['Name:'] }} for showing interest in Nexara. We help businesses save time, reduce manual work, and build powerful AI-driven workflows that make operations faster, cleaner, and more scalable.\n            </p>\n\n            <p style=\"margin:0 0 22px; color:#d1d5db; font-size:15.5px; line-height:1.7;\">\n              Our team will review your details and identify how {{ $('On lead entry').item.json['Service:'] }} can improve your bussiness growth.\n            </p>\n\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:25px 0;\">\n              <tr>\n                <td style=\"background:#08162f; border:1px solid #1e40af; border-radius:14px; padding:20px;\">\n                  <p style=\"margin:0 0 10px; color:#38bdf8; font-size:16px; font-weight:bold;\">\n                    What Nexara can help you automate:\n                  </p>\n                  <p style=\"margin:8px 0; color:#e5e7eb; font-size:14.5px;\">• Lead capture and follow-up systems</p>\n                  <p style=\"margin:8px 0; color:#e5e7eb; font-size:14.5px;\">• AI-powered customer replies</p>\n                  <p style=\"margin:8px 0; color:#e5e7eb; font-size:14.5px;\">• Email, CRM, and Google Sheets automation</p>\n                  <p style=\"margin:8px 0; color:#e5e7eb; font-size:14.5px;\">• Data extraction, reporting, and workflow optimization</p>\n</body> </html>\n                </td>\n              </tr>\n            </table>\n\n            <div style=\"text-align:center; margin:32px 0;\">\n              <a href=\"#\" style=\"background:linear-gradient(135deg,#2563eb,#06b6d4); color:#ffffff; text-decoration:none; padding:14px 30px; border-radius:30px; font-size:15px; font-weight:bold; display:inline-block; box-shadow:0 0 22px rgba(56,189,248,0.45);\">\n                Explore AI Automation\n              </a>\n            </div>\n\n            <p style=\"margin:0; color:#94a3b8; font-size:14px; line-height:1.7;\">\n              Nexara is built for businesses that want to move faster, work smarter, and replace repetitive manual tasks with intelligent automation.\n            </p>\n          </td>\n        </tr>\n\n        <tr>\n          <td style=\"padding:22px 35px; background:#070b1a; text-align:center; border-top:1px solid #1f2a5a;\">\n            <p style=\"margin:0; color:#38bdf8; font-size:15px; font-weight:bold;\">\n              Nexara AI\n            </p>\n            <p style=\"margin:6px 0 0; color:#64748b; font-size:12.5px;\">\n              AI Automation • Smart Workflows • Business Intelligence\n            </p>\n          </td>\n        </tr>\n\n      </table>\n    </td>\n  </tr>\n</table>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2912,
+        -304
+      ],
+      "id": "e3e84a72-9b89-48a0-ac3d-6775cb002536",
+      "name": "Welcoming Lead",
+      "webhookId": "d07b6105-870e-473b-8310-530298e0ba2b",
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RyPUSwfV2ywHqSnw",
+          "name": "Gmail account"
+        }
+      },
+      "notes": "First message"
+    },
+    {
+      "parameters": {
+        "sendTo": "rehaan666nazir@gmail.com",
+        "subject": "=Still thinking about {{ $('On lead entry').item.json[\"Service:\"] }}?",
+        "message": "=<!DOCTYPE html> <html> <head> <meta charset=\"UTF-8\" /> <title>Nexara Follow-Up</title> </head> <body style=\"margin:0; padding:0; background:#030712; font-family:Arial, Helvetica, sans-serif; color:#ffffff;\"> <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#030712; padding:30px 0;\"> <tr> <td align=\"center\"> <table width=\"620\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#090f1f; border-radius:18px; overflow:hidden; border:1px solid #312e81; box-shadow:0 0 35px rgba(124,58,237,0.25);\">\n<tr>\n          <td style=\"padding:34px 35px; background:linear-gradient(135deg,#111827,#1e1b4b,#312e81); text-align:center;\">\n            <h1 style=\"margin:0; font-size:30px; letter-spacing:1px; color:#ffffff;\">\n              Still Thinking About <span style=\"color:#a78bfa;\">{{ $('On lead entry').item.json['Service:'] }}</span>?\n            </h1>\n            <p style=\"margin:12px 0 0; color:#ddd6fe; font-size:15px;\">\n              Nexara is ready to help you automate smarter.\n            </p>\n          </td>\n        </tr>\n\n        <tr>\n          <td style=\"padding:35px;\">\n            <h2 style=\"margin:0 0 16px; color:#ffffff; font-size:23px;\">\n              Hi {{ $('On lead entry').item.json['Name:'] }},\n            </h2>\n\n            <p style=\"margin:0 0 18px; color:#d1d5db; font-size:15.5px; line-height:1.7;\">\n              We noticed you were interested in <strong style=\"color:#a78bfa;\">{{ $json.service }}</strong>. This could be a strong step toward saving time, reducing repetitive work, and making your business workflow more efficient.\n            </p>\n\n            <p style=\"margin:0 0 22px; color:#d1d5db; font-size:15.5px; line-height:1.7;\">\n              At Nexara, we focus on building practical AI and automation systems that help businesses handle leads, customer communication, data tasks, and daily operations with more speed and accuracy.\n            </p>\n\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:25px 0;\">\n              <tr>\n                <td style=\"background:#111827; border:1px solid #6d28d9; border-radius:14px; padding:20px;\">\n                  <p style=\"margin:0 0 10px; color:#c4b5fd; font-size:16px; font-weight:bold;\">\n                    Your requested service:\n                  </p>\n                  <p style=\"margin:0; color:#ffffff; font-size:20px; font-weight:bold;\">\n                    {{ $('On lead entry').item.json['Service:'] }}\n                  </p>\n                </td>\n              </tr>\n            </table>\n\n            <p style=\"margin:0 0 22px; color:#d1d5db; font-size:15.5px; line-height:1.7;\">\n              If you want, we can show you a simple automation flow based on your business needs and explain how it can work in real use.\n            </p>\n\n            <div style=\"text-align:center; margin:32px 0;\">\n              <a href=\"#\" style=\"background:linear-gradient(135deg,#7c3aed,#ec4899); color:#ffffff; text-decoration:none; padding:14px 30px; border-radius:30px; font-size:15px; font-weight:bold; display:inline-block; box-shadow:0 0 22px rgba(168,85,247,0.45);\">\n                Schedule Your Demo\n              </a>\n            </div>\n\n            <p style=\"margin:0; color:#94a3b8; font-size:14px; line-height:1.7;\">\n              This is a follow-up from Nexara because we believe the right automation can make your workflow faster, cleaner, and more scalable.\n            </p>\n          </td>\n        </tr>\n\n        <tr>\n          <td style=\"padding:22px 35px; background:#050816; text-align:center; border-top:1px solid #312e81;\">\n            <p style=\"margin:0; color:#a78bfa; font-size:15px; font-weight:bold;\">\n              Nexara AI\n            </p>\n            <p style=\"margin:6px 0 0; color:#64748b; font-size:12.5px;\">\n              AI Automation • Lead Systems • Smart Business Workflows\n            </p>\n          </td>\n        </tr>\n\n      </table>\n    </td>\n  </tr>\n</table>\n</body> </html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3360,
+        -304
+      ],
+      "id": "f7533354-eef4-4ae0-aa7d-fb654e5d22bd",
+      "name": "Follow Up",
+      "webhookId": "d07b6105-870e-473b-8310-530298e0ba2b",
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "RyPUSwfV2ywHqSnw",
+          "name": "Gmail account"
+        }
+      },
+      "notes": "The lead"
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Updating').item.json.documentId }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3344,
+        -784
+      ],
+      "id": "6f21084b-0934-488e-9f2b-ba34b53a1224",
+      "name": "Delete a file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fpLbPkKLw9Ce1f9N",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "On lead entry": [
+      {
+        "json": {
+          "Name:": ".zxnc",
+          "Email:": "matt@hunter.io",
+          "Contact:": "+92 343 8237483",
+          "Company:": "Hunter",
+          "Role:": "Student",
+          "Source:": "Facebook",
+          "Service:": "Leads Automation",
+          "submittedAt": "2026-06-13T17:16:30.361+05:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On lead entry": {
+      "main": [
+        [
+          {
+            "node": "Basic Email Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic Email Validation": {
+      "main": [
+        [
+          {
+            "node": "Hunter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Appending ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hunter": {
+      "main": [
+        [
+          {
+            "node": "Hunter Email Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hunter Email Validation": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Enrich lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Adding ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich lead": {
+      "main": [
+        [
+          {
+            "node": "Company Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Search CRM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Search CRM": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Assigning Lead Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Follow Up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Company Validation": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nurturing Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assigning Lead Score": {
+      "main": [
+        [
+          {
+            "node": "Based on",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Based on": {
+      "main": [
+        [
+          {
+            "node": "Contacting",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Copying ",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Approving Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Inappropriate Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approving Lead": {
+      "main": [
+        [
+          {
+            "node": "Contacting",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Copying ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Copying ": {
+      "main": [
+        [
+          {
+            "node": "Updating",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Updating": {
+      "main": [
+        [
+          {
+            "node": "Downloading",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Downloading": {
+      "main": [
+        [
+          {
+            "node": "Uploading pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uploading pdf": {
+      "main": [
+        [
+          {
+            "node": "Delete a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contacting": {
+      "main": [
+        [
+          {
+            "node": "Scheduling Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduling Event": {
+      "main": [
+        [
+          {
+            "node": "Welcoming Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Welcoming Lead": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a file": {
+      "main": [
+        [
+          {
+            "node": "Finalised Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d2648816-886f-40e3-a463-96b36248c3e4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "00e6d8d83e575f5abfbac10e201b156da59cd9991a7b2d38d1851a32c6ec6654"
+  },
+  "nodeGroups": [],
+  "id": "rmrOZRNvEWp8bRZ9",
+  "tags": [
+    {
+      "updatedAt": "2026-06-13T10:13:43.995Z",
+      "createdAt": "2026-06-13T10:13:43.995Z",
+      "id": "97Ms7c6XkUAAZH9k",
+      "name": "Contacting via slack"
+    },
+    {
+      "updatedAt": "2026-06-13T10:13:04.925Z",
+      "createdAt": "2026-06-13T10:13:04.925Z",
+      "id": "YolOYDoyP12bHRIM",
+      "name": "Hunter API"
+    },
+    {
+      "updatedAt": "2026-06-13T10:13:35.384Z",
+      "createdAt": "2026-06-13T10:13:35.384Z",
+      "id": "ZW5lDtUeJNto50Hk",
+      "name": "Gmail Message"
+    },
+    {
+      "updatedAt": "2026-06-13T10:13:13.549Z",
+      "createdAt": "2026-06-13T10:13:13.549Z",
+      "id": "ZbP2rHSa8dVdftcz",
+      "name": "Searching CRM"
+    },
+    {
+      "updatedAt": "2026-06-13T10:13:19.245Z",
+      "createdAt": "2026-06-13T10:13:19.245Z",
+      "id": "mpciuHIxMmoOHTyA",
+      "name": "Code Node"
+    },
+    {
+      "updatedAt": "2026-06-13T10:12:57.420Z",
+      "createdAt": "2026-06-13T10:12:57.420Z",
+      "id": "sNSuO39kOZ6xCyY6",
+      "name": "Making pdf"
+    },
+    {
+      "updatedAt": "2026-06-13T10:13:56.517Z",
+      "createdAt": "2026-06-13T10:13:56.517Z",
+      "id": "u51pvA5ur3RhMF1u",
+      "name": "Schedule event"
+    }
+  ]
+}
